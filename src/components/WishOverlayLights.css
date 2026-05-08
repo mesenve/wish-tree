@@ -1,0 +1,148 @@
+﻿.wish-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.wish-overlay__light {
+  position: absolute;
+  left: var(--wl-start-x);
+  top: var(--wl-start-y);
+  width: var(--wl-size);
+  height: var(--wl-size);
+  transform: translate(-50%, -50%) rotate(var(--wl-phase));
+  opacity: var(--wl-opacity);
+  will-change: transform, opacity;
+  pointer-events: auto;
+  cursor: pointer;
+  outline: none;
+}
+
+.wish-overlay__core,
+.wish-overlay__halo,
+.wish-overlay__trail {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.wish-overlay__core {
+  background: radial-gradient(
+    circle at 34% 30%,
+    rgba(255, 255, 250, 0.95) 0%,
+    color-mix(in srgb, #c39bff calc((1 - var(--wl-tone)) * 100%), #ffe2a0 calc(var(--wl-tone) * 100%)) 38%,
+    color-mix(in srgb, #9a72f0 calc((1 - var(--wl-tone)) * 100%), #ffcb6c calc(var(--wl-tone) * 100%)) 66%,
+    rgba(120, 88, 188, 0.22) 100%
+  );
+  box-shadow:
+    0 0 calc(var(--wl-size) * 1.2)
+      color-mix(in srgb, rgba(186, 145, 255, 0.56) calc((1 - var(--wl-tone)) * 100%), rgba(255, 208, 132, 0.58) calc(var(--wl-tone) * 100%)),
+    inset 0 0 calc(var(--wl-size) * 0.32) rgba(255, 255, 255, 0.24);
+}
+
+.wish-overlay__halo {
+  inset: calc(var(--wl-size) * -0.75);
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, rgba(196, 139, 255, 0.24) calc((1 - var(--wl-tone)) * 100%), rgba(255, 210, 136, 0.25) calc(var(--wl-tone) * 100%)) 0%,
+    color-mix(in srgb, rgba(148, 112, 232, 0.14) calc((1 - var(--wl-tone)) * 100%), rgba(255, 198, 120, 0.14) calc(var(--wl-tone) * 100%)) 45%,
+    transparent 72%
+  );
+  filter: blur(2px);
+}
+
+.wish-overlay__light--static {
+  animation:
+    wl-pulse var(--wl-duration) ease-in-out var(--wl-delay) infinite alternate,
+    wl-sway calc(var(--wl-duration) * 1.6) ease-in-out var(--wl-delay) infinite alternate;
+}
+
+.wish-overlay__light--orbit {
+  animation:
+    wl-orbit var(--wl-duration) cubic-bezier(0.4, 0.06, 0.22, 1) var(--wl-delay) infinite,
+    wl-sway calc(var(--wl-duration) * 0.8) ease-in-out var(--wl-delay) infinite alternate;
+}
+
+.wish-overlay__light--ascending {
+  animation:
+    wl-ascend var(--wl-duration) cubic-bezier(0.42, 0.02, 0.26, 1) var(--wl-delay) infinite,
+    wl-sway calc(var(--wl-duration) * 0.6) ease-in-out var(--wl-delay) infinite alternate;
+}
+
+.wish-overlay__light--ascending .wish-overlay__trail {
+  inset: auto;
+  left: 50%;
+  top: 48%;
+  width: 2px;
+  height: calc(var(--wl-size) * 2.2);
+  transform: translateX(-50%) rotate(-9deg);
+  border-radius: 999px;
+  background: linear-gradient(to top, rgba(143, 102, 220, 0.08) 0%, rgba(255, 214, 140, 0.35) 80%, transparent 100%);
+  filter: blur(1.7px);
+}
+
+@keyframes wl-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.82);
+    opacity: calc(var(--wl-opacity) * 0.75);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.08);
+    opacity: var(--wl-opacity);
+  }
+}
+
+@keyframes wl-sway {
+  0% {
+    margin-left: calc(var(--wl-wobble) * -0.6);
+    margin-top: calc(var(--wl-wobble) * 0.12);
+  }
+  100% {
+    margin-left: calc(var(--wl-wobble) * 0.6);
+    margin-top: calc(var(--wl-wobble) * -0.12);
+  }
+}
+
+@keyframes wl-orbit {
+  0% {
+    transform: translate(-50%, -50%) translate(calc(var(--wl-mid-x) * 0.34), calc(var(--wl-mid-y) * 0.22)) scale(0.86);
+  }
+  50% {
+    transform: translate(-50%, -50%) translate(calc(var(--wl-mid-x) * -0.22), calc(var(--wl-mid-y) * -0.14)) scale(1.05);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(calc(var(--wl-mid-x) * 0.34), calc(var(--wl-mid-y) * 0.22)) scale(0.86);
+  }
+}
+
+@keyframes wl-ascend {
+  0%,
+  6% {
+    transform: translate(-50%, -50%) scale(0.72);
+    opacity: 0;
+  }
+  16% {
+    transform: translate(-50%, -50%) scale(1.04);
+    opacity: var(--wl-opacity);
+  }
+  48% {
+    transform: translate(calc(-50% + var(--wl-drift) * 0.35), calc(-50% - 8%)) scale(0.98);
+    opacity: calc(var(--wl-opacity) * 0.74);
+  }
+  100% {
+    transform: translate(calc(-50% + var(--wl-drift)), calc(-50% - 26%)) scale(0.64);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wish-overlay__light,
+  .wish-overlay__light--orbit,
+  .wish-overlay__light--ascending,
+  .wish-overlay__light--static {
+    animation: none !important;
+    opacity: calc(var(--wl-opacity) * 0.72) !important;
+  }
+}

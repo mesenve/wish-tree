@@ -1,0 +1,165 @@
+.wish-light-stream {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.wish-light-stream__node {
+  position: absolute;
+  left: 50%;
+  bottom: var(--wl-origin-bottom);
+  width: var(--wl-size);
+  height: var(--wl-size);
+  transform: translate3d(calc(-50% + var(--wl-x0) * 1px), 0, 0);
+  will-change: transform, opacity;
+  animation-name: wl-rise-path, wl-rise-opacity;
+  animation-duration: var(--wl-duration), var(--wl-duration);
+  animation-timing-function: cubic-bezier(0.45, 0.04, 0.32, 1), cubic-bezier(0.42, 0, 0.58, 1);
+  animation-delay: var(--wl-delay), var(--wl-delay);
+  animation-iteration-count: infinite, infinite;
+}
+
+.wish-light-stream__trail {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: var(--wl-trail-len);
+  transform: translate(-50%, -35%) rotate(var(--wl-trail-deg));
+  transform-origin: 50% 100%;
+  background: linear-gradient(
+    to top,
+    transparent 0%,
+    rgba(139, 92, 246, calc(0.08 + var(--wl-hue-mix) * 0.12)) 45%,
+    rgba(255, 210, 120, 0.18) 78%,
+    rgba(255, 248, 220, 0.35) 100%
+  );
+  filter: blur(2px);
+  opacity: 0.38;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.wish-light-stream__core {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    rgba(255, 255, 252, 0.98) 0%,
+    rgba(255, 228, 160, 0.88) 32%,
+    rgba(255, 200, 90, 0.55) 52%,
+    rgba(186, 160, 255, 0.28) 72%,
+    rgba(90, 60, 140, 0.06) 100%
+  );
+  box-shadow:
+    0 0 calc(var(--wl-size) * 0.5) rgba(255, 210, 130, 0.42),
+    0 0 calc(var(--wl-size) * 0.95) rgba(167, 139, 250, 0.2),
+    inset 0 0 calc(var(--wl-size) * 0.25) rgba(255, 255, 255, 0.22);
+  animation:
+    wl-core-pulse calc(var(--wl-duration) * 0.55) ease-in-out var(--wl-delay) infinite alternate,
+    wl-core-flicker 1.85s ease-in-out calc(var(--wl-delay) + 0.15s) infinite;
+}
+
+.wish-light-stream__glow {
+  position: absolute;
+  inset: -35%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 220, 150, 0.22) 0%, transparent 68%);
+  filter: blur(8px);
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@keyframes wl-rise-path {
+  0% {
+    transform: translate3d(calc(-50% + var(--wl-x0) * 1px), 0, 0) scale(var(--wl-scale-a));
+  }
+  32% {
+    transform: translate3d(
+        calc(-50% + var(--wl-x1) * 1px),
+        calc(-0.34 * var(--wl-travel) * 1vh),
+        0
+      )
+      scale(var(--wl-scale-b));
+  }
+  62% {
+    transform: translate3d(
+        calc(-50% + (var(--wl-x1) * 0.55 + var(--wl-x2) * 0.45) * 1px),
+        calc(-0.66 * var(--wl-travel) * 1vh),
+        0
+      )
+      scale(var(--wl-scale-m));
+  }
+  100% {
+    transform: translate3d(calc(-50% + var(--wl-x2) * 1px), calc(-1 * var(--wl-travel) * 1vh), 0)
+      scale(var(--wl-scale-c));
+  }
+}
+
+@keyframes wl-rise-opacity {
+  0%,
+  2% {
+    opacity: 0;
+  }
+  9% {
+    opacity: var(--wl-op-peak);
+  }
+  55% {
+    opacity: calc(var(--wl-op-peak) * 0.72);
+  }
+  88%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes wl-core-pulse {
+  0% {
+    filter: brightness(1);
+    box-shadow:
+      0 0 calc(var(--wl-size) * 0.45) rgba(255, 210, 130, 0.38),
+      0 0 calc(var(--wl-size) * 0.85) rgba(167, 139, 250, 0.16),
+      inset 0 0 calc(var(--wl-size) * 0.22) rgba(255, 255, 255, 0.18);
+  }
+  100% {
+    filter: brightness(1.12);
+    box-shadow:
+      0 0 calc(var(--wl-size) * 0.62) rgba(255, 220, 160, 0.52),
+      0 0 calc(var(--wl-size) * 1.05) rgba(186, 170, 255, 0.26),
+      inset 0 0 calc(var(--wl-size) * 0.28) rgba(255, 255, 255, 0.26);
+  }
+}
+
+@keyframes wl-core-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  33% {
+    opacity: 0.9;
+  }
+  41% {
+    opacity: 1;
+  }
+  58% {
+    opacity: 0.86;
+  }
+  66% {
+    opacity: 0.98;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wish-light-stream__node {
+    animation-duration: 72s, 72s !important;
+    animation-timing-function: linear, linear !important;
+  }
+
+  .wish-light-stream__core {
+    animation: none !important;
+    opacity: 0.92 !important;
+  }
+}

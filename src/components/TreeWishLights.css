@@ -1,0 +1,211 @@
+/* Tree-integrated wish lights: static canopy + transition drift + ascending wishes */
+
+.tree-wish-lights {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.tree-wish-lights__node {
+  position: absolute;
+  width: var(--twl-size);
+  height: var(--twl-size);
+  transform: translate(-50%, -50%);
+  will-change: transform, opacity;
+}
+
+/* --- Static: buds / flower cores / tiny lanterns --- */
+.tree-wish-lights__node--static {
+  animation: twl-static-glow var(--twl-dur) ease-in-out var(--twl-delay) infinite alternate;
+}
+
+.tree-wish-lights__core--static {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 38% 32%,
+    rgba(255, 252, 240, 0.55) 0%,
+    rgba(255, 214, 140, 0.35) 42%,
+    rgba(186, 160, 255, 0.18) 72%,
+    transparent 100%
+  );
+  box-shadow:
+    0 0 calc(var(--twl-size) * 0.55) rgba(255, 205, 130, 0.22),
+    0 0 calc(var(--twl-size) * 0.9) rgba(140, 110, 200, 0.08);
+  opacity: var(--twl-op);
+}
+
+@keyframes twl-static-glow {
+  0% {
+    filter: brightness(0.92);
+    opacity: 0.85;
+  }
+  100% {
+    filter: brightness(1.12);
+    opacity: 1;
+  }
+}
+
+/* --- Transition: slow drift toward canopy merge --- */
+.tree-wish-lights__node--transition {
+  animation: twl-trans-move var(--twl-dur) cubic-bezier(0.45, 0.04, 0.35, 1) var(--twl-delay) infinite alternate;
+}
+
+@keyframes twl-trans-move {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translate(0, 0);
+  }
+  50% {
+    transform: translate(-50%, -50%)
+      translate(calc((var(--tx1) - var(--tx0)) * 0.32vmin), calc((var(--ty1) - var(--ty0)) * 0.32vmin));
+  }
+}
+
+.tree-wish-lights__core--transition {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 34% 30%,
+    rgba(255, 248, 230, 0.5) 0%,
+    rgba(230, 190, 120, 0.28) 48%,
+    rgba(160, 130, 210, 0.12) 100%
+  );
+  box-shadow:
+    0 0 calc(var(--twl-size) * 0.65) rgba(255, 200, 120, 0.2),
+    0 0 calc(var(--twl-size) * 1.05) rgba(150, 120, 200, 0.08);
+  opacity: var(--twl-op);
+  animation: twl-trans-pulse calc(var(--twl-dur) * 0.55) ease-in-out var(--twl-delay) infinite alternate;
+}
+
+@keyframes twl-trans-pulse {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+/* --- Ascending: branch -> canopy -> sky, soft trail --- */
+.tree-wish-lights__node--ascending {
+  animation-name: twl-asc-move, twl-asc-fade;
+  animation-duration: var(--twl-dur), var(--twl-dur);
+  animation-timing-function: cubic-bezier(0.42, 0.02, 0.28, 1), cubic-bezier(0.45, 0, 0.2, 1);
+  animation-delay: var(--twl-delay), var(--twl-delay);
+  animation-iteration-count: infinite, infinite;
+}
+
+.tree-wish-lights__trail {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: calc(var(--twl-size) * 2.4);
+  transform: translate(-50%, -30%) rotate(-8deg);
+  transform-origin: 50% 100%;
+  background: linear-gradient(
+    to top,
+    transparent 0%,
+    rgba(120, 80, 160, 0.12) 40%,
+    rgba(255, 200, 120, 0.16) 100%
+  );
+  filter: blur(2px);
+  opacity: 0.35;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.tree-wish-lights__core--ascending {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  z-index: 1;
+  background: radial-gradient(
+    circle at 34% 30%,
+    rgba(255, 255, 252, 0.75) 0%,
+    rgba(255, 218, 150, 0.55) 38%,
+    rgba(190, 165, 240, 0.22) 68%,
+    rgba(80, 50, 120, 0.04) 100%
+  );
+  box-shadow:
+    0 0 calc(var(--twl-size) * 0.55) rgba(255, 210, 140, 0.35),
+    0 0 calc(var(--twl-size) * 1.05) rgba(160, 130, 220, 0.15);
+  animation: twl-asc-core-pulse calc(var(--twl-dur) * 0.45) ease-in-out var(--twl-delay) infinite alternate;
+}
+
+@keyframes twl-asc-move {
+  0% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(0.68);
+    filter: brightness(1.15);
+  }
+  10% {
+    transform: translate(-50%, -50%) translate(0, 0) scale(1.02);
+    filter: brightness(1.22);
+  }
+  42% {
+    transform: translate(-50%, -50%) translate(var(--o1x), var(--o1y)) scale(1);
+    filter: brightness(1.05);
+  }
+  100% {
+    transform: translate(-50%, -50%) translate(var(--o2x), var(--o2y)) scale(0.36);
+    filter: brightness(0.95);
+  }
+}
+
+@keyframes twl-asc-fade {
+  0%,
+  8% {
+    opacity: 0;
+  }
+  16% {
+    opacity: var(--twl-op);
+  }
+  62% {
+    opacity: calc(var(--twl-op) * 0.62);
+  }
+  88%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes twl-asc-core-pulse {
+  0% {
+    box-shadow:
+      0 0 calc(var(--twl-size) * 0.45) rgba(255, 210, 140, 0.28),
+      0 0 calc(var(--twl-size) * 0.85) rgba(150, 125, 210, 0.1);
+  }
+  100% {
+    box-shadow:
+      0 0 calc(var(--twl-size) * 0.65) rgba(255, 220, 160, 0.42),
+      0 0 calc(var(--twl-size) * 1.1) rgba(170, 150, 230, 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tree-wish-lights__node--static,
+  .tree-wish-lights__node--transition,
+  .tree-wish-lights__node--ascending {
+    animation: none !important;
+  }
+
+  .tree-wish-lights__core--transition,
+  .tree-wish-lights__core--ascending {
+    animation: none !important;
+  }
+
+  .tree-wish-lights__core--static,
+  .tree-wish-lights__core--transition,
+  .tree-wish-lights__core--ascending {
+    opacity: 0.52 !important;
+  }
+}
