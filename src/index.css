@@ -764,20 +764,20 @@ body {
   display: flex;
   flex-direction: column;
   /* Keep modal visible even when backdrop blur is flaky */
-  background-color: rgba(14, 18, 30, 0.42);
+  background-color: rgba(14, 18, 30, 0.04);
   background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.014)),
-    linear-gradient(124deg, rgba(187, 205, 255, 0.038), rgba(212, 188, 255, 0.024)),
-    rgba(14, 18, 30, 0.42);
-  backdrop-filter: blur(12px) saturate(138%);
-  -webkit-backdrop-filter: blur(12px) saturate(138%);
+    linear-gradient(155deg, rgba(255, 255, 255, 0.007), rgba(255, 255, 255, 0.002)),
+    linear-gradient(124deg, rgba(187, 205, 255, 0.006), rgba(212, 188, 255, 0.004)),
+    rgba(14, 18, 30, 0.04);
+  backdrop-filter: blur(4px) saturate(120%);
+  -webkit-backdrop-filter: blur(4px) saturate(120%);
   border: none;
   border-radius: calc(var(--radius) + 6px);
   padding: 1.35rem 1.4rem 1.25rem;
   box-shadow:
-    0 20px 44px rgba(8, 9, 20, 0.18),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    0 14px 30px rgba(8, 9, 20, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    inset 0 -1px 0 rgba(255, 255, 255, 0.024);
 }
 
 .flow-panel-surface::before {
@@ -914,9 +914,9 @@ body {
   background:
     linear-gradient(160deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0.007)),
     linear-gradient(128deg, rgba(198, 216, 255, 0.018), rgba(190, 167, 255, 0.011)),
-    rgba(16, 22, 34, 0.18);
-  backdrop-filter: blur(8px) saturate(132%);
-  -webkit-backdrop-filter: blur(8px) saturate(132%);
+    rgba(16, 22, 34, 0.05);
+  backdrop-filter: blur(3px) saturate(118%);
+  -webkit-backdrop-filter: blur(3px) saturate(118%);
   color: rgba(255, 255, 255, 0.96);
   font-family: var(--font-sans);
   font-size: 0.69rem;
