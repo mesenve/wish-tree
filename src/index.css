@@ -764,11 +764,11 @@ body {
   display: flex;
   flex-direction: column;
   /* Keep modal visible even when backdrop blur is flaky */
-  background-color: rgba(14, 18, 30, 0.46);
+  background-color: rgba(14, 18, 30, 0.62);
   background:
-    linear-gradient(155deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012)),
-    linear-gradient(124deg, rgba(187, 205, 255, 0.032), rgba(212, 188, 255, 0.02)),
-    rgba(14, 18, 30, 0.46);
+    linear-gradient(155deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.018)),
+    linear-gradient(124deg, rgba(187, 205, 255, 0.05), rgba(212, 188, 255, 0.032)),
+    rgba(14, 18, 30, 0.62);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
   border: none;
